@@ -66,9 +66,18 @@ namespace IslandShot
 
             string url = "https://api.mymemory.translated.net/get?q=" +
                          Uri.EscapeDataString(text) +
-                         "&langpair=" + Uri.EscapeDataString(pair.Replace("|", "|"));
+                         "&langpair=" + Uri.EscapeDataString(pair.Replace("|", "|")) +
+                         "&de=myriadisle%40outlook.com";
 
-            string body = await Client.GetStringAsync(url).ConfigureAwait(false);
+            string body = "";
+            for (int quotaRetry = 0; quotaRetry < 2; quotaRetry++)
+            {
+                body = await Client.GetStringAsync(url).ConfigureAwait(false);
+                // 额度用完时接口会把提示语当译文返回，等一下再试一次
+                if (body.IndexOf("MYMEMORY WARNING", StringComparison.OrdinalIgnoreCase) < 0 &&
+                    body.IndexOf("QUOTA", StringComparison.OrdinalIgnoreCase) < 0) break;
+                if (quotaRetry == 0) await Task.Delay(2500).ConfigureAwait(false);
+            }
 
             var serializer = new JavaScriptSerializer { MaxJsonLength = 4 * 1024 * 1024 };
             var root = serializer.Deserialize<System.Collections.Generic.Dictionary<string, object>>(body);
