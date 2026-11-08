@@ -119,6 +119,7 @@ namespace IslandShot
             Content = root;
 
             AttachCapsuleGestures();
+            AttachCapsuleNotice();
 
             PreviewMouseLeftButtonUp += delegate(object sender, MouseButtonEventArgs e)
             {
@@ -542,6 +543,8 @@ namespace IslandShot
             capsule.PreviewMouseLeftButtonUp += delegate(object sender, MouseButtonEventArgs e)
             {
                 if (!capsulePressed) return;
+                // 点在"来消息提示"上：打开客户端，不展开图片面板
+                if (IsCapsuleNoticeSource(e.OriginalSource)) return;
                 capsulePressed = false;
                 Mouse.OverrideCursor = null;
                 try { if (capsule.IsMouseCaptured) capsule.ReleaseMouseCapture(); } catch (Exception) { }
