@@ -149,6 +149,7 @@ namespace IslandShot
         bool capsuleNoticeActive;
         string capsuleNoticeApp = "wechat";
         AudioWatcher audioWatcher;
+        DshWatcher dshWatcher;
 
         void AttachCapsuleNotice()
         {
@@ -217,6 +218,21 @@ namespace IslandShot
                     }), DispatcherPriority.Background);
                 });
                 audioWatcher.Start();
+
+            // DSH 干活结束 → 胶囊提醒
+            try
+            {
+                dshWatcher = new DshWatcher(delegate
+                {
+                    Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        MessengerLog("dsh finished");
+                        ShowCapsuleNotice("dsh");
+                    }), DispatcherPriority.Background);
+                });
+                dshWatcher.Start();
+            }
+            catch (Exception) { }
             }
             catch (Exception ex)
             {
@@ -226,6 +242,7 @@ namespace IslandShot
             Closed += delegate
             {
                 if (audioWatcher != null) audioWatcher.Dispose();
+        if (dshWatcher != null) dshWatcher.Dispose();
             };
         }
 
