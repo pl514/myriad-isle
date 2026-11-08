@@ -56,6 +56,7 @@ namespace IslandShot
         Button imageTab, textTab, textClear;
         Button translateTab;
         bool showingTranslate;
+        bool forceImageSurface;
         bool showingText;
         bool capsuleClosed;
         string lastClipboardHash = "";
@@ -879,6 +880,11 @@ namespace IslandShot
 
         void SetExpanded(bool value)
         {
+            if (value && forceImageSurface)
+            {
+                forceImageSurface = false;
+                SetTab(false);
+            }
             if (mouseHook != null) mouseHook.Enabled = value;
             SetExpandedAnimated(value);
         }
@@ -1577,11 +1583,11 @@ namespace IslandShot
         }
 
         // 取出的图片关闭后：直接收回胶囊，不再把面板重新展开一下。
+        // 预览窗口关闭后：把面板重新展开回来（点空白关掉大图 → 面板又出来）
         void ReturnToCapsule()
         {
             suppressDeactivate = false;
-            if (expanded) SetExpanded(false);
-            else CapsuleCatch();
+            if (!expanded) SetExpanded(true);
         }
         void ShowCardZoom(Border card, string path)
         {

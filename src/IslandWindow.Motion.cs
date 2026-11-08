@@ -547,6 +547,7 @@ namespace IslandShot
             {
                 peekOwned = true;
                 quietExpand = true;
+                forceImageSurface = true;
                 try { SetExpanded(true); } finally { quietExpand = false; }
             }
 
