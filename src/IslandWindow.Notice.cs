@@ -247,9 +247,24 @@ namespace IslandShot
             Motion.AnimateDouble(capsule, FrameworkElement.WidthProperty, capsule.Width, to, 220, Motion.Enter, 0, null);
         }
 
+        // 该客户端是否在前台：我们自己切过去时的提示音不算新消息
+        bool IsMessengerForeground(string appId)
+        {
+            try
+            {
+                IntPtr foreground = GetForegroundWindow();
+                if (foreground == IntPtr.Zero) return false;
+                int pid;
+                GetWindowThreadProcessId(foreground, out pid);
+                return MessengerIdByPid(pid) == appId;
+            }
+            catch (Exception) { return false; }
+        }
+
         void ShowCapsuleNotice(string appId)
         {
             if (capsuleNotice == null) return;
+            if (IsMessengerForeground(appId == "qq" ? "qq" : "wechat")) return;
             if (expanded)
             {
                 if (appId == "qq") unreadQq = true; else unreadWechat = true;
@@ -295,6 +310,15 @@ namespace IslandShot
             capsuleNoticeTimer.Stop();
             capsuleNoticeTimer.Interval = TimeSpan.FromMilliseconds(NoticeHoldMs);
             capsuleNoticeTimer.Start();
+        }
+
+        void ClearUnreadNotice()
+        {
+            pendingNoticeApp = null;
+            unreadWechat = false;
+            unreadQq = false;
+            HidePanelNoticeChip();
+            if (capsuleNoticeActive) HideCapsuleNotice();
         }
 
         void HideCapsuleNotice()
