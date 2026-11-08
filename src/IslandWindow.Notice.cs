@@ -19,7 +19,7 @@ namespace IslandShot
     {
         const double CapsuleNoticeWidth = 208;
         const double CapsuleIdleWidth = 148;
-        const int NoticeHoldMs = 0;   // 0 = 常驻，等点击/查看消息后消失
+        const int NoticeHoldMs = 2000;
 
         Grid capsuleNotice;
         TextBlock capsuleNoticeText;
