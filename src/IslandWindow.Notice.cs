@@ -295,8 +295,11 @@ namespace IslandShot
         void ShowCapsuleNotice(string appId)
         {
             if (capsuleNotice == null) return;
-            if (IsSuppressed(appId == "qq" ? "qq" : "wechat")) return;
-            if (IsMessengerForeground(appId == "qq" ? "qq" : "wechat")) return;
+            if (appId != "dsh")
+            {
+                if (IsSuppressed(appId == "qq" ? "qq" : "wechat")) return;
+                if (IsMessengerForeground(appId == "qq" ? "qq" : "wechat")) return;
+            }
             if (expanded)
             {
                 if (appId == "qq") unreadQq = true; else unreadWechat = true;
@@ -304,15 +307,16 @@ namespace IslandShot
                 RefreshPanelNoticeChip();
                 return;
             }
-            capsuleNoticeApp = appId == "qq" ? "qq" : "wechat";
+            capsuleNoticeApp = appId == "qq" ? "qq" : (appId == "dsh" ? "dsh" : "wechat");
             pendingNoticeApp = capsuleNoticeApp;   // 记成未读，打开面板后还能看到
-            if (capsuleNoticeApp == "qq") unreadQq = true; else unreadWechat = true;
+            if (capsuleNoticeApp != "dsh") { if (capsuleNoticeApp == "qq") unreadQq = true; else unreadWechat = true; }
             bool isQq = capsuleNoticeApp == "qq";
+            bool isDsh = capsuleNoticeApp == "dsh";
 
-            capsuleNoticeDot.Background = new SolidColorBrush(isQq
-                ? Color.FromRgb(18, 183, 245)
-                : Color.FromRgb(7, 193, 96));
-            capsuleNoticeText.Text = (isQq ? "QQ" : "微信") + " 有新消息";
+            capsuleNoticeDot.Background = new SolidColorBrush(isDsh
+                ? Color.FromRgb(124, 108, 242)
+                : isQq ? Color.FromRgb(18, 183, 245) : Color.FromRgb(7, 193, 96));
+            capsuleNoticeText.Text = isDsh ? "DSH 任务完成" : (isQq ? "QQ" : "微信") + " 有新消息";
 
             capsuleNoticeActive = true;
             capsuleNotice.Visibility = Visibility.Visible;
