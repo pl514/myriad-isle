@@ -1,10 +1,10 @@
-# Capsule image
+# 万象岛 · Myriad Isle
 
-独立胶囊截图/图片工具。当前主程序源码在 `src`，构建产物固定为 `build\Capsule image.exe`。
+英文名 **Myriad Isle**。独立胶囊截图/图片工具。当前主程序源码在 `src`，构建产物固定为 `build\MyriadIsle.exe`。
 
 ## 运行
 
-双击 `启动 Capsule image.cmd`，或直接双击 `build\Capsule image.exe`。
+双击 `启动万象岛.cmd`，或直接双击 `build\MyriadIsle.exe`。
 **用普通用户身份运行即可，不要选「以管理员身份运行」。**
 
 开机自启动在托盘菜单里开关（写 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`，
@@ -18,7 +18,7 @@
 
 ## 首次使用
 
-旧版留下的“最高权限”开机自启动计划任务 `CapsuleImage` 已于 2026-11-04 删除，
+旧版留下的“最高权限”开机自启动计划任务 `MyriadIsle` 已于 2026-11-04 删除，
 现在只剩普通权限的 `HKCU\...\Run` 自启动，登录时不会再弹管理员实例。
 Pro 版（`IslandShot-pro`）默认不自动启动，需要时在托盘菜单里开。
 ## 环境要求
@@ -87,7 +87,7 @@ GamePP 会把 `GPP64.dll` 注入到 IslandShot。Windows 事件记录显示崩�
   远程桌面里由受控进程拉起）启动的，`Shell_NotifyIcon` 会被静默拒绝 —— 表现为
   **托盘图标不出现**；拖放也会 `effect=0` —— 表现为**怎么都放不进微信**。
   这种情况下程序会弹一个不依赖托盘的说明窗，照提示在桌面上双击
-  `启动 Capsule image.cmd` 即可。反向同理：以管理员运行时，拖到同样以管理员运行
+  `启动 万象岛.cmd` 即可。反向同理：以管理员运行时，拖到同样以管理员运行
   的目标程序也会被拦，所以普通权限才是最省事的用法。
 
 ### 两套手势分开
@@ -167,3 +167,13 @@ PicRope 的 MIT 许可全文见 [`licenses\PicRope-MIT.txt`](licenses/PicRope-MI
 
 本项目使用独立名称、独立图标和独立 WPF 实现；没有使用 PicRope 的
 Filerobot 编辑器、WebView2 容器或图标素材。
+
+## 许可
+
+本项目以 **MIT** 许可开源，完整文本见 [`LICENSE`](LICENSE)。
+
+简单说：你可以自由使用、修改、再发布，甚至用在商业项目里，
+只需要保留版权声明和许可文本。但**名称和图标不在授权范围内**——
+衍生发布请换自己的名字和图标，避免和本项目混淆。
+
+第三方组件（Electron/WebView2/PicRope 等）的声明见 [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt)。

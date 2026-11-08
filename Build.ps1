@@ -16,10 +16,10 @@ $refs = @(
 )
 $sources = Get-ChildItem -LiteralPath (Join-Path $root 'src') -Filter '*.cs' | ForEach-Object { $_.FullName }
 & $csc /nologo /target:winexe /platform:x64 /optimize+ /codepage:65001 `
-    "/out:$out\Capsule image.exe" `
+    "/out:$out\MyriadIsle.exe" `
     "/win32manifest:$root\src\app.manifest" `
     "/win32icon:$root\src\app.ico" `
     $refs $sources
 if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
 
-Write-Output "Built: $out\Capsule image.exe"
+Write-Output "Built: $out\MyriadIsle.exe"

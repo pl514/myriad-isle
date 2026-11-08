@@ -96,9 +96,9 @@ namespace IslandShot
             ShowInTaskbar = false;
             Topmost = true;
 #if OUTSIDE_CLICK_TEST
-            Title = "Capsule image TEST";
+            Title = "万象岛 TEST";
 #else
-            Title = "Capsule image";
+            Title = "万象岛";
 #endif
             AllowDrop = true;
 
@@ -167,7 +167,7 @@ namespace IslandShot
 
             // 托盘图标先不挂，等窗口真正显示出来（Loaded）再挂：
             // 登录自启动时资源管理器可能还没准备好，太早调用 Shell_NotifyIcon 会失败。
-            tray = new Forms.NotifyIcon { Icon = LoadApplicationIcon(), Text = "Capsule image", Visible = false };
+            tray = new Forms.NotifyIcon { Icon = LoadApplicationIcon(), Text = "万象岛", Visible = false };
             tray.MouseUp += delegate(object sender, Forms.MouseEventArgs e)
             {
                 if (e.Button == Forms.MouseButtons.Right) ShowTrayMenu();
@@ -206,7 +206,7 @@ namespace IslandShot
                 // 顺手清掉旧版本留下的“最高权限”计划任务（普通权限下自启动就够了）。
                 var cleanup = new Thread(delegate() { RuntimeAccess.RemoveLegacyStartupTask(); });
                 cleanup.IsBackground = true;
-                cleanup.Name = "CapsuleImage.LegacyStartupCleanup";
+                cleanup.Name = "MyriadIsle.LegacyStartupCleanup";
                 cleanup.Start();
             };
             Closed += delegate
@@ -614,7 +614,7 @@ namespace IslandShot
                     new Point(0, 0), new Point(0, 1)),
                 Effect = new DropShadowEffect { BlurRadius = 24, ShadowDepth = 4, Opacity = 0.38 },
                 Cursor = Cursors.Hand,
-                ToolTip = "打开 Capsule image"
+                ToolTip = "打开 万象岛"
             };
             return DecorateCapsule(built);
         }
@@ -954,7 +954,7 @@ namespace IslandShot
             catch (Exception exception)
             {
                 DragNative.Log("video open failed: " + exception.Message);
-                MessageBox.Show("无法打开视频：" + exception.Message, "Capsule image", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("无法打开视频：" + exception.Message, "万象岛", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1618,13 +1618,13 @@ namespace IslandShot
             if (RuntimeAccess.IsLow)
             {
                 ShowBalloon(8000, "拖放被 Windows 阻止",
-                    "当前是低权限（沙箱）环境，系统不允许把图片拖到微信、资源管理器等普通程序。\n请双击「启动 Capsule image.cmd」以普通用户身份重新打开（不需要管理员）。",
+                    "当前是低权限（沙箱）环境，系统不允许把图片拖到微信、资源管理器等普通程序。\n请双击「启动 万象岛.cmd」以普通用户身份重新打开（不需要管理员）。",
                     Forms.ToolTipIcon.Warning);
             }
             else if (RuntimeAccess.IsElevated)
             {
                 ShowBalloon(8000, "拖放被 Windows 阻止",
-                    "Capsule image 正以管理员身份运行，而目标程序是普通权限，Windows 不允许从高权限拖到低权限。\n请在托盘菜单选择「以普通权限重新启动」。",
+                    "万象岛 正以管理员身份运行，而目标程序是普通权限，Windows 不允许从高权限拖到低权限。\n请在托盘菜单选择「以普通权限重新启动」。",
                     Forms.ToolTipIcon.Warning);
             }
         }
@@ -1735,7 +1735,7 @@ namespace IslandShot
         }
 
         // 开机自启动走 HKCU\...\Run：普通用户权限启动，不弹 UAC，也不依赖计划任务。
-        const string StartupValueName = "CapsuleImage";
+        const string StartupValueName = "MyriadIsle";
         const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
         bool StartupEnabled()

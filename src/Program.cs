@@ -92,10 +92,10 @@ namespace IslandShot
                     if (!quietStartup)
                     {
                         System.Windows.MessageBox.Show(
-                            "已经有一个以管理员权限运行的 Capsule image 在运行。\n\n" +
-                            "请先右键托盘图标退出它（或在任务管理器里结束 “Capsule image.exe”），" +
-                            "然后再双击「启动 Capsule image.cmd」以普通权限启动。",
-                            "Capsule image",
+                            "已经有一个以管理员权限运行的 万象岛 在运行。\n\n" +
+                            "请先右键托盘图标退出它（或在任务管理器里结束 “MyriadIsle.exe”），" +
+                            "然后再双击「启动 万象岛.cmd」以普通权限启动。",
+                            "万象岛",
                             System.Windows.MessageBoxButton.OK,
                             System.Windows.MessageBoxImage.Information);
                     }
@@ -132,7 +132,7 @@ namespace IslandShot
         {
             WaitForShell();
 #if OUTSIDE_CLICK_TEST
-            const string mutexName = "CapsuleImage.OutsideClickTest.SingleInstance";
+            const string mutexName = "MyriadIsle.OutsideClickTest.SingleInstance";
 #else
             const string mutexName = "IslandShot.SingleInstance";
 #endif

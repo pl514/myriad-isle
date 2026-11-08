@@ -192,10 +192,10 @@ namespace IslandShot
             try
             {
                 string output;
-                if (RunSchtasks("/Query /TN \"CapsuleImage\"", out output) == 0)
+                if (RunSchtasks("/Query /TN \"MyriadIsle\"", out output) == 0)
                 {
                     string deleted;
-                    RunSchtasks("/Delete /TN \"CapsuleImage\" /F", out deleted);
+                    RunSchtasks("/Delete /TN \"MyriadIsle\" /F", out deleted);
                     DragNative.Log("legacy elevated startup task removed");
                 }
             }

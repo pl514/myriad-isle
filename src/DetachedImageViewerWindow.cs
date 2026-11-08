@@ -56,7 +56,7 @@ namespace IslandShot
             ShowActivated = false;
             ShowInTaskbar = false;
             Topmost = true;
-            Title = "Capsule image · " + System.IO.Path.GetFileName(path);
+            Title = "万象岛 · " + System.IO.Path.GetFileName(path);
 
             frame = new Border
             {
