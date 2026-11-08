@@ -400,6 +400,7 @@ namespace IslandShot
         {
             if (expanded == value) return;
             expanded = value;
+            if (!value) MessengerLog("collapse from " + new System.Diagnostics.StackTrace(1, false).GetFrame(0).GetMethod().Name);
             if (value)
             {
                 capsule.Visibility = Visibility.Visible;
