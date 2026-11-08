@@ -12,7 +12,9 @@ $refs = @(
     "/r:System.dll",
     "/r:System.Core.dll",
     "/r:System.Drawing.dll",
-    "/r:System.Windows.Forms.dll"
+    "/r:System.Windows.Forms.dll",
+    "/r:$framework\System.Net.Http.dll",
+    "/r:$framework\System.Web.Extensions.dll"
 )
 $sources = Get-ChildItem -LiteralPath (Join-Path $root 'src') -Filter '*.cs' | ForEach-Object { $_.FullName }
 & $csc /nologo /target:winexe /platform:x64 /optimize+ /codepage:65001 `
