@@ -17,6 +17,125 @@ namespace IslandShot
     // ---------------------------------------------------------------------
     internal sealed partial class IslandWindow
     {
+        string pendingNoticeApp = "";
+        bool unreadWechat;
+        bool unreadQq;
+
+        Border panelNoticeChip;
+        Border panelNoticeDot;
+        TextBlock panelNoticeText;
+        string panelNoticeApp;
+
+        FrameworkElement BuildPanelNoticeChip()
+        {
+            panelNoticeDot = new Border
+            {
+                Width = 7,
+                Height = 7,
+                CornerRadius = new CornerRadius(4),
+                Background = new SolidColorBrush(Color.FromRgb(7, 193, 96)),
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 6, 0)
+            };
+
+            panelNoticeText = new TextBlock
+            {
+                Text = "",
+                FontFamily = new FontFamily("Microsoft YaHei UI"),
+                FontSize = 11,
+                Foreground = new SolidColorBrush(Color.FromRgb(232, 236, 246)),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var row = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
+            row.Children.Add(panelNoticeDot);
+            row.Children.Add(panelNoticeText);
+
+            panelNoticeChip = new Border
+            {
+                CornerRadius = new CornerRadius(11),
+                Background = new SolidColorBrush(Color.FromArgb(230, 34, 38, 50)),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(60, 255, 255, 255)),
+                BorderThickness = new Thickness(1),
+                Padding = new Thickness(10, 5, 12, 5),
+                Margin = new Thickness(4, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Center,
+                Cursor = Cursors.Hand,
+                Visibility = Visibility.Collapsed,
+                Child = row,
+                ToolTip = "左键：微信　右键：QQ"
+            };
+            // 两家都有未读：左键微信、右键 QQ；只有一家未读：左右键都打开那一家
+            panelNoticeChip.MouseLeftButtonUp += delegate
+            {
+                if (unreadWechat) { OpenMessengerApp("wechat"); unreadWechat = false; }
+                else if (unreadQq) { OpenMessengerApp("qq"); unreadQq = false; }
+                SyncPendingNotice();
+                RefreshPanelNoticeChip();
+            };
+            panelNoticeChip.MouseRightButtonUp += delegate
+            {
+                if (unreadQq) { OpenMessengerApp("qq"); unreadQq = false; }
+                else if (unreadWechat) { OpenMessengerApp("wechat"); unreadWechat = false; }
+                SyncPendingNotice();
+                RefreshPanelNoticeChip();
+            };
+            return panelNoticeChip;
+        }
+
+        void ShowPanelNoticeChip(string appId)
+        {
+            if (panelNoticeChip == null) return;
+            if (appId == "qq") unreadQq = true; else unreadWechat = true;
+            pendingNoticeApp = appId == "qq" ? "qq" : "wechat";
+            RefreshPanelNoticeChip();
+        }
+
+        // 按未读集合刷新：单个显示名字，两个都显示"微信/QQ"
+        void SyncPendingNotice()
+        {
+            if (unreadQq) pendingNoticeApp = "qq";
+            else if (unreadWechat) pendingNoticeApp = "wechat";
+            else pendingNoticeApp = null;
+        }
+
+        void RefreshPanelNoticeChip()
+        {
+            if (panelNoticeChip == null) return;
+            if (!unreadWechat && !unreadQq)
+            {
+                panelNoticeChip.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            if (unreadWechat && unreadQq)
+            {
+                panelNoticeDot.Background = new SolidColorBrush(Color.FromRgb(7, 193, 96));
+                panelNoticeText.Text = "微信/QQ 未读消息";
+            }
+            else if (unreadQq)
+            {
+                panelNoticeDot.Background = new SolidColorBrush(Color.FromRgb(18, 183, 245));
+                panelNoticeText.Text = "QQ 未读消息";
+            }
+            else
+            {
+                panelNoticeDot.Background = new SolidColorBrush(Color.FromRgb(7, 193, 96));
+                panelNoticeText.Text = "微信 未读消息";
+            }
+
+            panelNoticeChip.Visibility = Visibility.Visible;
+            panelNoticeChip.IsHitTestVisible = true;
+        }
+
+        // 只是把胶囊收起来（比如收起面板、展开功能球），未读状态保留
+        void HidePanelNoticeChip()
+        {
+            if (panelNoticeChip == null) return;
+            panelNoticeChip.Visibility = Visibility.Collapsed;
+            panelNoticeApp = null;
+        }
+
         const double CapsuleNoticeWidth = 208;
         const double CapsuleIdleWidth = 148;
         const int NoticeHoldMs = 2000;
@@ -130,7 +249,14 @@ namespace IslandShot
 
         void ShowCapsuleNotice(string appId)
         {
-            if (capsuleNotice == null || expanded) return;
+            if (capsuleNotice == null) return;
+            if (expanded)
+            {
+                if (appId == "qq") unreadQq = true; else unreadWechat = true;
+                pendingNoticeApp = appId == "qq" ? "qq" : "wechat";
+                RefreshPanelNoticeChip();
+                return;
+            }
             capsuleNoticeApp = appId == "qq" ? "qq" : "wechat";
             bool isQq = capsuleNoticeApp == "qq";
 

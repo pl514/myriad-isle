@@ -762,7 +762,10 @@ namespace IslandShot
             actions.Children.Add(textClear);
             actions.Children.Add(add);
             actions.Children.Add(close);
-            header.Children.Add(tabHost);
+            var headerLeft = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Left };
+            headerLeft.Children.Add(tabHost);
+            headerLeft.Children.Add(BuildPanelNoticeChip());
+            header.Children.Add(headerLeft);
             header.Children.Add(actions);
 
             cards = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 8, 0, 0) };
@@ -880,6 +883,8 @@ namespace IslandShot
 
         void SetExpanded(bool value)
         {
+            if (value) RefreshPanelNoticeChip();
+            else HidePanelNoticeChip();
             if (value && forceImageSurface)
             {
                 forceImageSurface = false;
