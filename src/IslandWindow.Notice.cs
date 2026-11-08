@@ -258,6 +258,8 @@ namespace IslandShot
                 return;
             }
             capsuleNoticeApp = appId == "qq" ? "qq" : "wechat";
+            pendingNoticeApp = capsuleNoticeApp;   // 记成未读，打开面板后还能看到
+            if (capsuleNoticeApp == "qq") unreadQq = true; else unreadWechat = true;
             bool isQq = capsuleNoticeApp == "qq";
 
             capsuleNoticeDot.Background = new SolidColorBrush(isQq
