@@ -128,6 +128,7 @@ namespace IslandShot
             PreviewMouseLeftButtonUp += delegate(object sender, MouseButtonEventArgs e)
             {
                 if (!expanded) return;
+                if (capsule.IsMouseOver) return;   // 点胶囊本身不收起
                 if (panel.IsMouseOver) return;
                 if (IsInteractive(e.OriginalSource)) return;
                 CollapseLater();
@@ -1287,6 +1288,9 @@ namespace IslandShot
             }
         }
 
+        // 同一个源文件只复制一次：否则每次点击都会生成新副本，去重永远失效（会出现重复卡片）
+        static readonly Dictionary<string, string> localCopyCache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         string LocalCopy(string path)
         {
             string dataRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
@@ -1294,8 +1298,22 @@ namespace IslandShot
             if (full.StartsWith(dataRoot, StringComparison.OrdinalIgnoreCase)) return full;
             string folder = Path.Combine(dataRoot, "images");
             if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+            string key = full;
+            try
+            {
+                var info = new FileInfo(full);
+                key = full + "|" + info.Length + "|" + info.LastWriteTimeUtc.Ticks;
+            }
+            catch (Exception) { }
+
+            string cached;
+            if (localCopyCache.TryGetValue(key, out cached) && File.Exists(cached)) return cached;
+            if (localCopyCache.Count > 300) localCopyCache.Clear();
+
             string destination = Path.Combine(folder, DateTime.Now.ToString("yyyyMMdd-HHmmss-fff") + "_" + Path.GetFileName(path));
             File.Copy(path, destination, true);
+            localCopyCache[key] = destination;
             return destination;
         }
 
