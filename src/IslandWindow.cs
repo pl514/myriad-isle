@@ -132,6 +132,7 @@ namespace IslandShot
                 string app = capsuleNoticeApp;
                 e.Handled = true;
                 OpenMessengerApp(app);
+                SuppressApp(app, 4000);
                 ClearUnreadNotice();
             };
             AttachCapsuleNotice();
