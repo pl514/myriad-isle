@@ -1378,6 +1378,8 @@ namespace IslandShot
             };
             var previewItem = new MenuItem { Header = "打开预览" };
             previewItem.Click += delegate { ShowCardZoom(card, path); };
+            var translateImageItem = new MenuItem { Header = "翻译图片" };
+            translateImageItem.Click += delegate { TranslateImageAsync(path); };
             var fullItem = new MenuItem { Header = "大图查看" };
             fullItem.Click += delegate { ShowFullImage(path); };
             var pinItem = new MenuItem { Header = "钉在桌面" };
@@ -1392,6 +1394,7 @@ namespace IslandShot
                 catch (Exception) { }
             };
             menu.Items.Add(editItem);
+            menu.Items.Add(translateImageItem);
             menu.Items.Add(new Separator());
             menu.Items.Add(previewItem);
             menu.Items.Add(fullItem);
