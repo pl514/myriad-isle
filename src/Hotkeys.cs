@@ -13,7 +13,8 @@ namespace IslandShot
         Window = 3,
         Screen = 4,
         ImagesToggle = 5,
-        Record = 6
+        Record = 6,
+        ScreenTranslate = 8
     }
 
     internal sealed class HotkeyBinding
@@ -36,6 +37,7 @@ namespace IslandShot
                 if (Action == HotkeyAction.Window) return "窗口截图";
                 if (Action == HotkeyAction.Screen) return "全屏截图";
                 if (Action == HotkeyAction.ImagesToggle) return "图片收起";
+                if (Action == HotkeyAction.ScreenTranslate) return "屏幕翻译";
                 return "开始/停止录屏";
             }
         }
@@ -71,12 +73,13 @@ namespace IslandShot
         {
             return new[]
             {
-                new HotkeyBinding { Action = HotkeyAction.Toggle, Modifiers = ModControl | ModAlt, Key = 0x20 },
-                new HotkeyBinding { Action = HotkeyAction.Region, Modifiers = ModControl | ModShift, Key = 0x41 },
-                new HotkeyBinding { Action = HotkeyAction.Window, Modifiers = ModControl | ModAlt, Key = 0x32 },
-                new HotkeyBinding { Action = HotkeyAction.Screen, Modifiers = ModControl | ModAlt, Key = 0x33 },
-                new HotkeyBinding { Action = HotkeyAction.ImagesToggle, Modifiers = ModControl | ModAlt, Key = 0x48 },
-                new HotkeyBinding { Action = HotkeyAction.Record, Modifiers = ModControl | ModAlt, Key = 0x52 }
+                new HotkeyBinding { Action = HotkeyAction.Toggle, Modifiers = ModControl | ModAlt | ModShift, Key = 0x20 },
+                new HotkeyBinding { Action = HotkeyAction.Region, Modifiers = ModControl | ModAlt | ModShift, Key = 0x41 },
+                new HotkeyBinding { Action = HotkeyAction.Window, Modifiers = ModControl | ModAlt | ModShift, Key = 0x32 },
+                new HotkeyBinding { Action = HotkeyAction.Screen, Modifiers = ModControl | ModAlt | ModShift, Key = 0x33 },
+                new HotkeyBinding { Action = HotkeyAction.ImagesToggle, Modifiers = ModControl | ModAlt | ModShift, Key = 0x48 },
+                new HotkeyBinding { Action = HotkeyAction.Record, Modifiers = ModControl | ModAlt | ModShift, Key = 0x52 },
+                new HotkeyBinding { Action = HotkeyAction.ScreenTranslate, Modifiers = ModControl | ModAlt | ModShift, Key = 0x46 }
             };
         }
 
