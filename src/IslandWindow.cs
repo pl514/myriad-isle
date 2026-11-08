@@ -516,7 +516,7 @@ namespace IslandShot
             {
                 if (e.ChangedButton != MouseButton.Left) return;
                 // 点在消息提示上：让它自己跳转客户端，别展开面板
-                if (capsuleNoticeActive && capsuleNotice != null && capsuleNotice.IsMouseOver) return;
+                if (IsCapsuleNoticeSource(e.OriginalSource)) return;
                 capsuleStart = e.GetPosition(this);
                 capsuleDragLeft = Left;
                 capsuleDragCursorX = System.Windows.Forms.Cursor.Position.X / DpiScale();
@@ -1135,7 +1135,7 @@ namespace IslandShot
             {
                 if (e.ChangedButton != MouseButton.Left) return;
                 // 点在消息提示上：让它自己跳转客户端，别展开面板
-                if (capsuleNoticeActive && capsuleNotice != null && capsuleNotice.IsMouseOver) return;
+                if (IsCapsuleNoticeSource(e.OriginalSource)) return;
                 if (e.ClickCount == 2)
                 {
                     videoClickTimer.Stop();
@@ -1454,7 +1454,7 @@ namespace IslandShot
             {
                 if (e.ChangedButton != MouseButton.Left) return;
                 // 点在消息提示上：让它自己跳转客户端，别展开面板
-                if (capsuleNoticeActive && capsuleNotice != null && capsuleNotice.IsMouseOver) return;
+                if (IsCapsuleNoticeSource(e.OriginalSource)) return;
                 if (e.ClickCount == 2)
                 {
                     clickTimer.Stop();
