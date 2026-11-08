@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -771,6 +772,7 @@ namespace IslandShot
                 Padding = new Thickness(16, 0, 16, 0),
                 Background = Brushes.Transparent
             };
+            scroller.Resources[typeof(ScrollBar)] = BuildTranslateScrollBarStyle();
             scroller.PreviewMouseWheel += delegate(object sender, MouseWheelEventArgs e)
             {
                 GlideImages(-e.Delta);
@@ -797,6 +799,8 @@ namespace IslandShot
                 Background = Brushes.Transparent,
                 Visibility = Visibility.Collapsed
             };
+            textScroller.Resources[typeof(ScrollBar)] = BuildTranslateScrollBarStyle();
+            textScroller.PreviewMouseWheel += TranslateWheel;
             textEmpty = new TextBlock
             {
                 Text = "暂无文字\n复制文字后会自动同步到这里",
