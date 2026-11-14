@@ -1,5 +1,8 @@
 # 万象岛 · Myriad Isle
 
+> 🌐 官网：**https://pl514.github.io/myriad-isle-web/** —— 功能详解、截图、下载都在这里。
+
+
 > 常驻桌面顶部的 Windows「动态岛」胶囊：截图、编辑、翻译，一个文件就够。
 
 ![面板截图](docs/screenshots/panel.png)
