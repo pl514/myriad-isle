@@ -173,6 +173,8 @@ MyMemory 免费额度按天计算。可等一会儿，或在设置里换成自�
 
 输出 `publish\万象岛-3.20.zip`，含 exe 与使用说明。
 
-## 许可
+## 许可与免责
 
-[MIT](LICENSE)
+本项目使用 [MIT](LICENSE) 许可。
+
+使用前请阅读 **[免责声明](DISCLAIMER.md)**，想参与开发看 **[贡献指南](CONTRIBUTING.md)**。
