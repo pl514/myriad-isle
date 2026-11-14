@@ -1,179 +1,178 @@
 # 万象岛 · Myriad Isle
 
-英文名 **Myriad Isle**。独立胶囊截图/图片工具。当前主程序源码在 `src`，构建产物固定为 `build\MyriadIsle.exe`。
+> 常驻桌面顶部的 Windows「动态岛」胶囊：截图、编辑、翻译，一个文件就够。
 
-## 运行
+![面板截图](docs/screenshots/panel.png)
 
-双击 `启动万象岛.cmd`，或直接双击 `build\MyriadIsle.exe`。
-**用普通用户身份运行即可，不要选「以管理员身份运行」。**
+<p align="center">
+  <img alt="Windows" src="https://img.shields.io/badge/Windows-10%20%2F%2011-0078D4?logo=windows&logoColor=white">
+  <img alt=".NET" src="https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet&logoColor=white">
+  <img alt="WPF" src="https://img.shields.io/badge/UI-WPF-5C2D91">
+  <img alt="单文件" src="https://img.shields.io/badge/portable-单文件%20%C2%B7%20免安装-ff9f1c">
+  <img alt="许可" src="https://img.shields.io/badge/license-MIT-2ea44f">
+</p>
 
-开机自启动在托盘菜单里开关（写 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`，
-普通权限、不弹 UAC、不用计划任务）。
+---
 
-需要重新编译时双击 `构建.cmd`（已带 ExecutionPolicy Bypass，不需要改系统策略）。
+## 这是什么
 
-> 从终端、沙箱或自动化工具里启动时，进程会继承那个环境的**低权限**令牌，
-> 此时托盘图标和拖拽会被 Windows 拒绝。程序会弹一个说明窗告诉你原因；
-> 请在桌面上双击启动。
+**万象岛** 是一个贴在屏幕顶部的胶囊小条，像手机上的「灵动岛」：
 
-## 首次使用
+- 截图后，图片**自动吸进胶囊**，点开能看、能改、能直接拖进微信 / QQ / 文件夹
+- 按一下热键，框住屏幕任意区域，**就地翻译**成中文
+- 复制任何文字，它自动收进胶囊，随时找回来
 
-旧版留下的“最高权限”开机自启动计划任务 `MyriadIsle` 已于 2026-11-04 删除，
-现在只剩普通权限的 `HKCU\...\Run` 自启动，登录时不会再弹管理员实例。
-Pro 版（`IslandShot-pro`）默认不自动启动，需要时在托盘菜单里开。
-## 环境要求
+整个程序**只有一个 exe（约 486 KB）**，不需要安装、不需要 .NET 之外的任何运行库。
 
-- Windows 10 及以上
-- 构建需要 .NET Framework 4.8 自带的 `csc.exe`（系统自带，无需安装 SDK）
+## 功能一览
 
-## 为什么以前“必须用管理员运行”？
+| 模块 | 能做什么 |
+| --- | --- |
+| 📸 **截图** | 区域 / 窗口 / 全屏，截完自动落进胶囊 |
+| 🖼️ **图片管理** | 胶囊里横向排列，悬停放大，单击预览，右键菜单，可拖拽到其它程序 |
+| ✏️ **图片编辑** | 矩形、椭圆、箭头、画笔、荧光笔、文字、气泡、步骤序号、模糊、马赛克、裁剪、撤销重做 |
+| 📝 **文字** | 复制任意文字自动收进胶囊，可复制、清空、翻译 |
+| 🌐 **翻译** | 文本翻译 + **屏幕框选翻译**；引擎可切：免费 MyMemory / 自己的 AI 模型 |
+| 💬 **微信 / QQ 提示** | 有新消息时胶囊冒出提示条，点击直达对应窗口 |
+| 🎬 **录屏** | 一键录 MP4（需要 ffmpeg） |
+| 🎞️ **视频播放** | 胶囊里的视频可直接播放 |
 
-不是代码要求的，是**文件夹的完整性标签**。
+## 界面展示
 
-2026-11-04 排查确认：`E:\yingyong\deepseekgongzuoqv` 这个目录被加上了
-**低完整性标签（Low Mandatory Level）**，里面的每个文件（包括 exe）都继承它。
-Windows 会用低完整性创建这种 exe 的进程，于是：
+### 胶囊本体
 
-- `Shell_NotifyIcon` 被静默拒绝 → **托盘图标不出现**（返回 FALSE，不报错）；
-- OLE 拖放被 UIPI 拦截 → **拖到微信 `effect=0`**，怎么放都放不进。
+<p align="center">
+  <img src="docs/screenshots/capsule.png" width="300" alt="胶囊">
+</p>
 
-以管理员启动是 High 完整性，所以“看起来正常”。实证：
+平时就是顶部一条窄窄的小条，不挡视线；鼠标移上去或按热键就展开成面板。
 
-| exe 所在目录 | 进程完整性 | 托盘图标 |
-| --- | --- | --- |
-| `...\deepseekgongzuoqv\...`（带 Low 标签） | Low | 无 |
-| `E:\yingyong\IslandShot-normal`（无标签） | 普通用户 | 有 |
+### 展开后的面板
 
-解决办法二选一：
+三个页签：**图片 / 文字 / 翻译**，图片以卡片横向排列，滚轮翻页。
 
-1. **把程序放在没有 Low 标签的目录**（本副本就在 `E:\yingyong\IslandShot-normal`，已验证普通权限下托盘正常）；
-2. 或者用**管理员** PowerShell 一次性把标签改回 Medium：
+## 下载与安装
 
-   ```powershell
-   icacls "E:\yingyong\deepseekgongzuoqv" /setintegritylevel (OI)(CI)M /T
-   ```
+**去 [Releases](https://github.com/pl514/myriad-isle/releases/latest) 下载最新 zip。**
 
-   之后那个目录里的 exe 双击就是普通权限，重新编译出来的 exe 也不会再变 Low。
-
-## 已知问题：游戏加加（GamePP）冲突
-GamePP 会把 `GPP64.dll` 注入到 IslandShot。Windows 事件记录显示崩溃模块就是 `GPP64.dll`，不是岛窗自己的代码。
-请先从托盘退出游戏加加（并关闭其开机启动），否则点击收起/展开可能整个进程崩溃。
-
-## 当前可用
-
-- 启动后在屏幕顶部显示胶囊，点击展开图片面板。
-- 面板外任意位置点击、面板左上角 ×、`Ctrl+Alt+Space`、双击托盘图标都可收起回胶囊。
-- 截图：`Ctrl+Alt+2` 当前窗口、`Ctrl+Alt+3` 全屏；截图自动添加到胶囊。区域截图仍未稳定，暂未接入。
-- `添加图片`；把图片拖到胶囊附近并停留约 0.75 秒，胶囊展开后才允许放下，添加完自动收起；面板内 `Ctrl+V` 粘贴剪贴板图片。
-- 卡片横向排列，滚轮横向滚动。
-- 卡片右键菜单 `从胶囊移除`。
-- 托盘图标：双击打开/收起，右键打开/退出。
-- 导入的图片会复制到 `build\data\images\`，路径保存在 `build\data\images.txt`，重启后自动恢复。
-
-## 新增：系统原生跨应用拖拽导出
-
-在展开的面板里，鼠标按住任意卡片拖动（图片或视频），走的是 Windows 自带 OLE 拖放
-（`ole32!DoDragDrop`），不是模拟鼠标/点击脚本。
-
-- 拖到任意接受文件/图片的窗口（微信聊天框、画图、浏览器、Word/WPS、资源管理器……）松开即可放置。
-- 视频卡片同样能拖：发的是真实文件路径（CF_HDROP），微信等程序会按视频文件接收，不会当成图片。
-- 拖动过程中有图片缩略图跟随鼠标。
-- 目标窗口可以接收时，缩略图出现绿色描边和「松开放置」提示。
-- 按 `Esc`、或松手在不能放置的位置 = 取消：缩略图消失、卡片恢复原样，胶囊状态不变。
-- 只发送「复制」效果（`DROPEFFECT_COPY`），目标端不会移动/删除胶囊里的源文件。
-- 权限相关（重要）：托盘图标、拖到微信/资源管理器**都不需要管理员**。
-  普通用户双击启动时进程是 Medium，这两个功能本来就正常。
-  Windows 用 UIPI 隔离完整性级别：如果程序是被**低完整性**环境（沙箱、自动化工具、
-  远程桌面里由受控进程拉起）启动的，`Shell_NotifyIcon` 会被静默拒绝 —— 表现为
-  **托盘图标不出现**；拖放也会 `effect=0` —— 表现为**怎么都放不进微信**。
-  这种情况下程序会弹一个不依赖托盘的说明窗，照提示在桌面上双击
-  `启动 万象岛.cmd` 即可。反向同理：以管理员运行时，拖到同样以管理员运行
-  的目标程序也会被拦，所以普通权限才是最省事的用法。
-
-### 两套手势分开
-
-| 位置 | 手势 | 行为 |
-| --- | --- | --- |
-| 胶囊本体 | 原地按下再松开（位移 < 4px） | 展开图片面板 |
-| 胶囊本体 | 按住拖动（位移 ≥ 4px） | 移动胶囊窗口（`DragMove`，位置记到 `build\data\window.txt`） |
-| 面板卡片 | 按住拖动（超过系统拖拽阈值） | 把卡片内容作为原生拖拽数据包导出（图片：CF_HDROP + DIB/PNG；视频：只用 CF_HDROP 文件路径） |
-| 面板卡片 | 单击 / 右键 | 不触发导出；右键照旧弹出菜单 |
-
-### 拖拽数据包里有什么
-
-由 `src\NativeImageDrag.cs` 里的自定义 `IDataObject` 提供，全部走 HGLOBAL，可跨进程：
-
-| 格式 | 内容 | 典型接收方 |
-| --- | --- | --- |
-| `CF_HDROP` | 胶囊内图片的真实文件路径 | 微信、资源管理器、浏览器文件框、Word/WPS |
-| `CF_DIB` | 24 位位图（BITMAPINFOHEADER + BGR 像素） | 画图、Office、WPS |
-| `PNG` / `image/png` | PNG 原始字节 | Chromium 系浏览器、支持图片剪贴板的程序 |
-| `Preferred DropEffect` | `DROPEFFECT_COPY` | 资源管理器（显示为复制而不是移动） |
-
-`IDropSource` 负责跟随系统拖拽循环：`GiveFeedback` 收到目标允许的效果时点亮缩略图，
-`QueryContinueDrag` 处理松手 / `Esc` 取消。
-
-### 验证
-
-仓库内 `test\` 目录带三个自测工具：
-
-```powershell
-# 1) 数据包格式与字节自检（不弹窗）
-& .\test\PayloadTest.exe .\build\data\images\sample.png
-
-# 2) 独立进程 OLE 接收探针，再从胶囊卡片拖进它的窗口
-Start-Process .\test\DropProbe.exe
-
-# 3) 浏览器接收测试页（用 Chrome/Edge 打开后把卡片拖进页面）
-#    test\drop-target.html
+```
+1. 下载  MyriadIsle-3.15.zip（约 0.3 MB）
+2. 解压到任意文件夹
+3. 双击  MyriadIsle.exe
+4. 屏幕顶部出现胶囊，完事
 ```
 
-完整验收项见 [`docs\验收清单.md`](docs/验收清单.md)，实现细节见
-[`docs\技术实现说明.md`](docs/技术实现说明.md)。
+### 系统要求
 
-拖拽诊断日志：`%TEMP%\IslandShot-drag.log`（记录拖拽开始/结束、effect 与失败原因）。
+| 项目 | 要求 |
+| --- | --- |
+| 系统 | Windows 10 / 11（64 位） |
+| 运行时 | .NET Framework 4.8（Win10 1903+ / Win11 自带） |
+| 录屏（可选） | ffmpeg，放到程序目录或加入 PATH |
 
-## 下一阶段
+### 关于杀毒软件
 
-- 截图：区域、窗口、全屏快捷键。
-- 全屏 MP4 录制。
-- 桌面钉图、悬浮相框、独立显示/隐藏热键。
-- 图片编辑器。
-- 托盘、开机启动、热键设置、应用内更新。
-- 自动吸附工作区、多屏、贴边自动收起。
+程序没有代码签名证书，首次运行可能被 Defender / 360 / 火绒拦一下。把文件夹加入信任即可。
 
-## 动效（WPF 原生）
+## 五分钟上手
 
-胶囊、面板、页签、卡片、托盘菜单和滚轮滚动的动效都是 WPF 自带动画
-（`DoubleAnimation` / `ColorAnimation` / 关键帧 + 缓动函数），没有引入任何前端库或 WebView。
+1. **截图**：`Ctrl + Alt + Shift + A` 框选区域 → 松手，图片进胶囊
+2. **改图**：单击胶囊里的图片 → 预览 → 编辑
+3. **用图**：把图片从胶囊拖进微信 / QQ / 文件夹，或右键复制
+4. **翻译**：`Ctrl + Alt + Shift + F` → 框住要翻译的地方 → 自动识别并覆盖成中文
 
-- 只改 `Opacity`、`RenderTransform`、画笔颜色，不动布局属性，所以拖拽、右键拖出、
-  剪贴板同步、热键、查看器的行为都不变。
-- 动画结束会把终值写回基础值并清除动画，后续代码里直接赋值依旧生效。
-- 想整体关掉：把 `src\Motion.cs` 里的 `allowed` 改成 `false`。
+## 热键表
 
-节奏、缓动、实现细节和验证方法见 [`docs\动效说明.md`](docs/动效说明.md)。
+全部可以在「托盘右键 → 热键设置」里改。
 
-## 来源与许可
+| 功能 | 默认热键 |
+| --- | --- |
+| 显示 / 收起胶囊 | `Ctrl + Alt + Shift + Space` |
+| 区域截图 | `Ctrl + Alt + Shift + A` |
+| 窗口截图 | `Ctrl + Alt + Shift + 2` |
+| 全屏截图 | `Ctrl + Alt + Shift + 3` |
+| 收起 / 展开图片 | `Ctrl + Alt + Shift + H` |
+| 开始 / 停止录屏 | `Ctrl + Alt + Shift + R` |
+| 屏幕翻译 | `Ctrl + Alt + Shift + F` |
 
-本项目在产品和交互设计上参考了 PicRope（图绳）：
-https://github.com/Renly1994/PicRope
+## 数据与隐私
 
-PicRope 原版权：Copyright (c) 2026 Alejandro Buján，MIT License。
-上游 Tendedero：https://github.com/alejandrobujan/tendedero
+**所有数据都在本地，程序不会上传任何东西**（除非你主动使用翻译服务）。
 
-完整第三方声明见 [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt)，
-PicRope 的 MIT 许可全文见 [`licenses\PicRope-MIT.txt`](licenses/PicRope-MIT.txt)。
+```
+MyriadIsle.exe
+data\
+├── images\        截图与图片
+├── screenshots\   剪贴板图片
+├── Recordings\    录屏
+├── translate-img\ 图片翻译结果
+├── settings.txt   设置
+└── hotkeys.txt    改过的热键
+```
 
-本项目使用独立名称、独立图标和独立 WPF 实现；没有使用 PicRope 的
-Filerobot 编辑器、WebView2 容器或图标素材。
+- 迁移：整个文件夹复制走（绿色软件）
+- 清空：删 `data\` 重来
+- 开机自启：托盘菜单开关，写当前用户注册表 Run 项，不弹 UAC
+
+## 和 Pro 版的区别
+
+| | 标准版（本仓库） | [Pro 版](https://github.com/pl514/myriad-isle-pro) |
+| --- | --- | --- |
+| 体积 | 单文件 486 KB | 约 1 MB + WebView2 运行库 |
+| 截图 / 编辑 / 翻译 | ✅ | ✅ |
+| 微信 / QQ 提示 | ✅ | ✅ |
+| 录屏 | ✅ | ✅ |
+| 抖音置顶小窗 | — | ✅ |
+| 音乐面板 / 桌面歌词 | — | ✅ |
+| AI 问答面板 | — | ✅ |
+| 三点球快捷入口 | — | ✅ |
+
+想要更轻、够用 → 标准版；想要抖音小窗、音乐、歌词投射 → 装 Pro 版。
+
+## 常见问题
+
+<details>
+<summary><b>双击没反应</b></summary>
+
+多半是杀软拦截。把文件夹加入信任再试；也可以右键属性确认文件没被删。
+</details>
+
+<details>
+<summary><b>拖图片到微信失败</b></summary>
+
+Windows 不允许低权限进程给高权限进程拖文件。请用**普通权限**运行（不要「以管理员身份运行」）。
+</details>
+
+<details>
+<summary><b>翻译提示配额用完</b></summary>
+
+MyMemory 免费额度按天计算。可等一会儿，或在设置里换成自己的 AI 模型（DeepSeek、智谱等有免费额度）。
+</details>
+
+<details>
+<summary><b>热键没反应</b></summary>
+
+可能被输入法或其它软件占用，在热键设置里换一组即可。
+</details>
+
+## 从源码构建
+
+不需要 Visual Studio，也不用 NuGet：
+
+```powershell
+.\Build.ps1
+```
+
+产物固定为 `build\MyriadIsle.exe`（需要 .NET Framework 4.8 自带的 `csc.exe`）。
+
+### 打发布包
+
+```powershell
+.\Publish.ps1 -Version 3.15
+```
+
+输出 `publish\万象岛-3.15.zip`，含 exe 与使用说明。
 
 ## 许可
 
-本项目以 **MIT** 许可开源，完整文本见 [`LICENSE`](LICENSE)。
-
-简单说：你可以自由使用、修改、再发布，甚至用在商业项目里，
-只需要保留版权声明和许可文本。但**名称和图标不在授权范围内**——
-衍生发布请换自己的名字和图标，避免和本项目混淆。
-
-第三方组件（Electron/WebView2/PicRope 等）的声明见 [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt)。
+[MIT](LICENSE)
