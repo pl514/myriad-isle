@@ -2,12 +2,22 @@
 # 用法：  .\Publish.ps1              （默认版本 3.15，可用 -Version 指定）
 # 产物：  publish\万象岛-<版本>\  和  publish\万象岛-<版本>.zip
 param(
-    [string]$Version = "3.15"
+    [string]$Version = ""
 )
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $root
+
+# ---- 版本号：默认读 src\AppInfo.cs ----
+if (-not $Version) {
+    $info = Join-Path $root 'src\AppInfo.cs'
+    if (Test-Path $info) {
+        $m = Select-String -Path $info -Pattern 'Version\s*=\s*"([0-9\.]+)"' | Select-Object -First 1
+        if ($m) { $Version = $m.Matches[0].Groups[1].Value }
+    }
+    if (-not $Version) { $Version = '0.0' }
+}
 
 $package = "万象岛-$Version"
 $outRoot = Join-Path $root 'publish'

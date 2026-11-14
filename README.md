@@ -56,7 +56,7 @@
 **去 [Releases](https://github.com/pl514/myriad-isle/releases/latest) 下载最新 zip。**
 
 ```
-1. 下载  MyriadIsle-3.15.zip（约 0.3 MB）
+1. 下载  MyriadIsle-3.20.zip（约 0.31 MB）
 2. 解压到任意文件夹
 3. 双击  MyriadIsle.exe
 4. 屏幕顶部出现胶囊，完事
@@ -168,10 +168,10 @@ MyMemory 免费额度按天计算。可等一会儿，或在设置里换成自�
 ### 打发布包
 
 ```powershell
-.\Publish.ps1 -Version 3.15
+.\Publish.ps1
 ```
 
-输出 `publish\万象岛-3.15.zip`，含 exe 与使用说明。
+输出 `publish\万象岛-3.20.zip`，含 exe 与使用说明。
 
 ## 许可
 
